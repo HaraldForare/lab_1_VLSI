@@ -35,7 +35,7 @@ begin
     
     -- purpose: Implements the next_state logic as well as the output logic
     -- type : combinational
-    combinational: process () -- fill out the sensitivity list
+    combinational: process (clk) -- fill out the sensitivity list
     begin
         -- set default value
         next_state <= current_state;
