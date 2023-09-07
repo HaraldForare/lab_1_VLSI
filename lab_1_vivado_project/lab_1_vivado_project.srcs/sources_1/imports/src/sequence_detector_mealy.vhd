@@ -11,11 +11,14 @@ entity sequence_detector_mealy is
     );
 end sequence_detector_mealy;
 
+
+
+
 architecture behavioural of sequence_detector_mealy is
 
 
     -- Define a enumeration type for the states
-    type state_type is (s_init, s_1, s_11, s_111, s_1111);
+    type state_type is (s_init, s_1, s_10, s_101);
     
     -- Define the needed internal signals
     signal current_state, next_state: state_type;
@@ -24,7 +27,7 @@ begin
             
     -- purpose: Implements the registers for the sequence decoder
     -- type : sequential
-    registers: process (clk, reset_n)
+    registers: process (clk, reset_n, data_valid)
     begin
         if reset_n = '0' then
             current_state <= s_init;
@@ -35,8 +38,72 @@ begin
     
     -- purpose: Implements the next_state logic as well as the output logic
     -- type : combinational
-    combinational: process () -- fill out the sensitivity list
+    combinational: process (clk, reset_n) -- fill out the sensitivity list
     begin
+    
+        if reset_n = '0' then
+        
+            current_state <= s_init;
+        
+        else if rising_edge (clk) and data_valid = '1' then
+            data_out <= '0';
+            if current_state = s_init then
+                --next_state <= s_init when data_serial = '0' else s_1;
+                
+                if data_serial = '0' then
+                    next_state <= s_init;
+                    
+                else
+                    next_state <= s_1;
+                
+                end if;
+                
+                
+            elsif current_state = s_1 then 
+                --next_state <= s_10 when data_serial = '0' else s_1;
+
+                if data_serial = '0' then
+                    next_state <= s_10;
+                    
+                else
+                    next_state <= s_1;
+                    
+                end if;
+                    
+                    
+                    
+            elsif current_state = s_10 then
+                --next_state <= s_init when data_serial = '0' else s_101;
+                
+                if data_serial = '0' then
+                    next_state <= s_init;
+                    
+                else
+                    next_state <= s_101;
+                    
+                end if;
+                
+
+            elsif current_state = s_101 then
+                --next_state <= s_10 when data_serial = '0' else s_1;
+                --data_out <= '1' when data_serial = '0' else '0';
+                
+                if data_serial = '0' then
+                    next_state <= s_10;
+                    data_out <= '1';
+                    
+                else
+                    next_state <= s_1;
+            
+                end if;
+
+
+            end if;
+            
+        
+        end if;
+        
+    
         -- set default value
         next_state <= current_state;
         data_out <= '0';
