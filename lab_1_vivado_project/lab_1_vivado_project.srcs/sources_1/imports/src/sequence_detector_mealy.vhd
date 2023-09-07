@@ -40,86 +40,48 @@ begin
     -- type : combinational
     combinational: process (clk, reset_n) -- fill out the sensitivity list
     begin
-    
-        if reset_n = '0' then
-        
-            current_state <= s_init;
-        
-        else if rising_edge (clk) and data_valid = '1' then
-            data_out <= '0';
-            if current_state = s_init then
-                --next_state <= s_init when data_serial = '0' else s_1;
-                
-                if data_serial = '0' then
-                    next_state <= s_init;
-                    
-                else
-                    next_state <= s_1;
-                
-                end if;
-                
-                
-            elsif current_state = s_1 then 
-                --next_state <= s_10 when data_serial = '0' else s_1;
-
-                if data_serial = '0' then
-                    next_state <= s_10;
-                    
-                else
-                    next_state <= s_1;
-                    
-                end if;
-                    
-                    
-                    
-            elsif current_state = s_10 then
-                --next_state <= s_init when data_serial = '0' else s_101;
-                
-                if data_serial = '0' then
-                    next_state <= s_init;
-                    
-                else
-                    next_state <= s_101;
-                    
-                end if;
-                
-
-            elsif current_state = s_101 then
-                --next_state <= s_10 when data_serial = '0' else s_1;
-                --data_out <= '1' when data_serial = '0' else '0';
-                
-                if data_serial = '0' then
-                    next_state <= s_10;
-                    data_out <= '1';
-                    
-                else
-                    next_state <= s_1;
-            
-                end if;
-
-
-            end if;
-            
-        
-        end if;
-        
-    
-        -- set default value
         next_state <= current_state;
         data_out <= '0';
-
-        case current_state is
-            when s_init =>
-                 if data_serial = '0' then
-                    next_state <= s_init;  -- is this line necessary?
-                 else
-                    next_state <= s_1;
-                 end if;
-            when s_1 =>
-                --?
-                --?
-                --?
-         end case;
+        if reset_n = '0' then    
+            current_state <= s_init;
+            
+        elsif rising_edge (clk) and data_valid = '1' then
+            case current_state is
+                when s_init =>
+                    --next_state <= s_init when data_serial = '0' else s_1;
+                    if data_serial = '0' then
+                        next_state <= s_init; 
+                    else
+                        next_state <= s_1;
+                    end if;
+                    
+                when s_1 => 
+                    --next_state <= s_10 when data_serial = '0' else s_1;
+                    if data_serial = '0' then
+                    else
+                        next_state <= s_1; 
+                    end if;
+                      
+                when s_10 =>
+                    --next_state <= s_init when data_serial = '0' else s_101;
+                    if data_serial = '0' then
+                        next_state <= s_init;   
+                    else
+                        next_state <= s_101;
+                    end if;
+                    
+                when s_101 =>
+                    --next_state <= s_10 when data_serial = '0' else s_1;
+                    --data_out <= '1' when data_serial = '0' else '0';
+                    if data_serial = '0' then
+                        next_state <= s_10;
+                        data_out <= '1';
+                    else
+                        next_state <= s_1;
+                    end if;
+                    
+            end case;
+        end if;
     end process;
 
 end behavioural;
