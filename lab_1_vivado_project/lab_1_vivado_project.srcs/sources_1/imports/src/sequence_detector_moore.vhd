@@ -15,7 +15,7 @@ architecture behavioural of sequence_detector_moore is
 
 
     -- Define a enumeration type for the states
-    type state_type is (s_init, s_1, s_11, s_111, s_1111);
+    type state_type is (s_init, s_1, s_10, s_101, s_1010);
     
     -- Define the needed internal signals
     signal current_state, next_state: state_type;
@@ -38,20 +38,48 @@ begin
     combinational: process (clk) -- fill out the sensitivity list
     begin
         -- set default value
+        data_out <= '0';
         next_state <= current_state;
         
-        case current_state is
-            when s_init =>
-                 if data_serial = '0' then
-                    next_state <= s_init;  -- is this line necessary?
-                 else
-                    next_state <= s_1;
-                 end if;
-            when s_1 =>
-                --?
-                --?
-                --?
-         end case;
+        if reset_n = '0' then    
+            --current_state <= s_init;
+            
+            
+        elsif rising_edge (clk) and data_valid = '1' then
+            case current_state is
+                when s_init =>
+                     if data_serial = '0' then
+                        next_state <= s_init;
+                     else
+                        next_state <= s_1;
+                     end if;
+                when s_1 =>
+                     if data_serial = '0' then
+                        next_state <= s_10;
+                     else
+                        next_state <= s_1;
+                     end if;
+                 when s_10 =>
+                     if data_serial = '0' then
+                        next_state <= s_init;
+                     else
+                        next_state <= s_101;
+                     end if;
+                 when s_101 =>
+                     if data_serial = '0' then
+                        next_state <= s_1010;
+                     else
+                        next_state <= s_1;
+                     end if;
+                 when s_1010 =>
+                    data_out <= '1';
+                     if data_serial = '0' then
+                        next_state <= s_init;
+                     else
+                        next_state <= s_101;
+                     end if;
+             end case;
+         end if;
     end process;
 
     

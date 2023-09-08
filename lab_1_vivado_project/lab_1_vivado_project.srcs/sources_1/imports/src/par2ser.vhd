@@ -27,25 +27,63 @@ begin
         if reset_n = '0' then
             current_sample_shifter <= (others => '0');
             current_counter <= (others =>'0');
+            
         elsif rising_edge(clk) then
             current_sample_shifter <= next_sample_shifter;
             current_counter <= next_counter;
         end if;
+        
     end process;
     
+    
     -- increment code
-    -- ???
-
+    counter: process(clk, reset_n)
+    begin
+        if reset_n = '0' then 
+            current_counter <= "00";
+            next_counter    <= "00";
+        
+        else
+            next_counter <= current_counter + 1;
+        
+        end if;
+    end process;
+    
+    
+    
+    
+    
     -- output logic
-    -- ???
+    output_logic: process(clk)
+    begin
+        data_serial <= next_sample_shifter(3);
+    end process;
+    
+    
+    
 
-    combinational_shifter : process(ALL) -- fill out the sensitivity list
+    combinational_shifter : process(clk) -- fill out the sensitivity list
     begin
         -- default values (why needed?)
         next_sample_shifter <= current_sample_shifter;
 
         -- write the code for parallel to serial conversion
-	-- ???
+	
+	   -- Load from parallel data
+	   if current_counter = "00" then
+	       current_sample_shifter <= data_parallel;
+	       
+	   
+	   -- Load from previous shift register
+	   else
+	       current_sample_shifter(3) <= next_sample_shifter(2);
+           current_sample_shifter(2) <= next_sample_shifter(1);
+	       current_sample_shifter(1) <= next_sample_shifter(0);
+	       current_sample_shifter(0) <= '0';
+	   
+	   end if;
+	
+	
 
     end process;
     

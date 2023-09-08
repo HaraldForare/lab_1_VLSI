@@ -42,8 +42,9 @@ begin
     begin
         next_state <= current_state;
         data_out <= '0';
+        
         if reset_n = '0' then    
-            current_state <= s_init;
+            --current_state <= s_init;
             
         elsif rising_edge (clk) and data_valid = '1' then
             case current_state is
