@@ -29,60 +29,95 @@ begin
     -- type : sequential
     registers: process (clk, reset_n, data_valid)
     begin
-        if reset_n = '0' then
+        if reset_n = '0' or data_valid = '0' then
             current_state <= s_init;
+            
         elsif rising_edge(clk) then
             current_state <= next_state;
         end if;
     end process;
     
+    
+    
     -- purpose: Implements the next_state logic as well as the output logic
     -- type : combinational
-    combinational: process (clk, reset_n) -- fill out the sensitivity list
+    combinational: process (current_state, data_serial) -- fill out the sensitivity list
     begin
-        next_state <= current_state;
-        data_out <= '0';
+
+        --case current_state is
+        --    when s_init =>
+        --        --next_state <= s_init when data_serial = '0' else s_1;
+        --        if data_serial = '0' then
+        --            next_state <= s_init; 
+        --        else
+        --            next_state <= s_1;
+        --        end if;
+        --        
+        --    when s_1 => 
+        --        --next_state <= s_10 when data_serial = '0' else s_1;
+        --        if data_serial = '0' then
+        --            next_state <= s_10;
+        --        else
+        --            next_state <= s_1; 
+        --        end if;
+        --          
+        --    when s_10 =>
+        --        --next_state <= s_init when data_serial = '0' else s_101;
+        --        if data_serial = '0' then
+        --            next_state <= s_init;   
+        --        else
+        --            next_state <= s_101;
+        --        end if;
+        --        
+        --    when s_101 =>
+        --        --next_state <= s_10 when data_serial = '0' else s_1;
+        --        --data_out <= '1' when data_serial = '0' else '0';
+        --        if data_serial = '0' then
+        --            next_state <= s_10;
+        --            data_out <= '1';
+        --        else
+        --            next_state <= s_1;
+        --        end if;
+        --        
+        --end case;
         
-        if reset_n = '0' then    
-            --current_state <= s_init;
+        
+        data_out <= '0';
+
+        
+        if current_state = s_init then
+            if data_serial = '0' then
+                next_state <= s_init; 
+            else
+                next_state <= s_1;
+            end if;
             
-        elsif rising_edge (clk) and data_valid = '1' then
-            case current_state is
-                when s_init =>
-                    --next_state <= s_init when data_serial = '0' else s_1;
-                    if data_serial = '0' then
-                        next_state <= s_init; 
-                    else
-                        next_state <= s_1;
-                    end if;
-                    
-                when s_1 => 
-                    --next_state <= s_10 when data_serial = '0' else s_1;
-                    if data_serial = '0' then
-                    else
-                        next_state <= s_1; 
-                    end if;
-                      
-                when s_10 =>
-                    --next_state <= s_init when data_serial = '0' else s_101;
-                    if data_serial = '0' then
-                        next_state <= s_init;   
-                    else
-                        next_state <= s_101;
-                    end if;
-                    
-                when s_101 =>
-                    --next_state <= s_10 when data_serial = '0' else s_1;
-                    --data_out <= '1' when data_serial = '0' else '0';
-                    if data_serial = '0' then
-                        next_state <= s_10;
-                        data_out <= '1';
-                    else
-                        next_state <= s_1;
-                    end if;
-                    
-            end case;
+        elsif current_state = s_1 then
+            if data_serial = '0' then
+                next_state <= s_10;
+            else
+                next_state <= s_1; 
+            end if;
+              
+        elsif current_state = s_10 then
+            if data_serial = '0' then
+                next_state <= s_init;   
+            else
+                next_state <= s_101;
+            end if;
+        
+        elsif current_state = s_101 then 
+            if data_serial = '0' then
+                next_state <= s_10;
+                data_out <= '1';
+            else
+                next_state <= s_1;
+            end if;
+            
         end if;
+        
+        
+        
     end process;
 
 end behavioural;

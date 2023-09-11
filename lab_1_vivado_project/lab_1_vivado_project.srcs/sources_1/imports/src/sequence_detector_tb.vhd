@@ -76,7 +76,8 @@ begin
     -- Read values from stimuli.txt file
     stimuli_gen: stimulus_generator
         generic map (
-            FILE_NAME => "stimuli.txt",
+            --FILE_NAME => "stimuli.txt",
+            FILE_NAME => "/media/sf_lab_1_VLSI/stimuli.txt",
             SAMPLE_WIDTH => 4
         )
         port map (
@@ -120,6 +121,15 @@ begin
             moore_count <= 0;
             mealy_count <= 0;
         else
+        
+            if moore_detected = '1' then
+                --moore_count <= moore_count + 1;
+            end if;
+            
+            if mealy_detected = '1' then
+                --mealy_count <= mealy_count + 1;
+            end if;
+        
             -- create counters here to count sequence occurrences for both mealy and moore implementations
             -- ???
             -- ???
