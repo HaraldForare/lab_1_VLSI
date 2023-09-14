@@ -122,12 +122,12 @@ begin
             mealy_count <= 0;
         else
         
-            if moore_detected = '1' then
-                --moore_count <= moore_count + 1;
+            if rising_edge(moore_detected) then
+                moore_count <= moore_count + 1;
             end if;
             
-            if mealy_detected = '1' then
-                --mealy_count <= mealy_count + 1;
+            if rising_edge(mealy_detected) then
+                mealy_count <= mealy_count + 1;
             end if;
         
             -- create counters here to count sequence occurrences for both mealy and moore implementations
