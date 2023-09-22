@@ -19,9 +19,9 @@ architecture behavioural of sequence_detector_moore is
 begin  
     -- purpose: Implements the registers for the sequence decoder
     -- type : sequential
-    registers: process (clk, reset_n, data_valid)
+    registers: process (clk, reset_n)
     begin
-        if reset_n = '0' or data_valid = '0' then
+        if reset_n = '0' then
             current_state <= s_init;
         elsif rising_edge(clk) then
             current_state <= next_state;
