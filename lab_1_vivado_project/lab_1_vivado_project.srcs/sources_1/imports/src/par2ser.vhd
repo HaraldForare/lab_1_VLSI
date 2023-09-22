@@ -58,7 +58,7 @@ begin
     end process;
 
 
-    combinational_shifter: process(current_counter) -- fill out the sensitivity list
+    combinational_shifter: process(conversion_start, data_parallel, current_sample_shifter) -- fill out the sensitivity list
     begin
         -- default values (why needed?)
         --next_sample_shifter <= current_sample_shifter;
