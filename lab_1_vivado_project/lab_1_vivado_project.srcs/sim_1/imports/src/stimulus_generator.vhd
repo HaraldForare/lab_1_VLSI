@@ -8,7 +8,6 @@ use std.textio.all;
 entity stimulus_generator is
     generic (
         FILE_NAME: string := "stimuli.txt";
-        --FILE_NAME: string := "/media/sf_lab_1_VLSI/stimuli.txt";
         SAMPLE_WIDTH: positive
     );
     port (
