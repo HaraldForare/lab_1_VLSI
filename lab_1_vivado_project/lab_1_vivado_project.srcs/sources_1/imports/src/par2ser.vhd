@@ -42,7 +42,8 @@ begin
     
     
     -- output logic
-    data_serial <= current_sample_shifter(3);
+    --data_serial <= current_sample_shifter(3);  -- MSB first
+    data_serial <= current_sample_shifter(0);  -- LSB first
     
 
     
@@ -74,11 +75,20 @@ begin
        
        -- Load from previous shift register
        else
-           next_sample_shifter(3) <= current_sample_shifter(2);
-           next_sample_shifter(2) <= current_sample_shifter(1);
-           next_sample_shifter(1) <= current_sample_shifter(0);
-           next_sample_shifter(0) <= '0';
-       
+           -- MSB first (wrong?)
+           --next_sample_shifter(3) <= current_sample_shifter(2);
+           --next_sample_shifter(2) <= current_sample_shifter(1);
+           --next_sample_shifter(1) <= current_sample_shifter(0);
+           --next_sample_shifter(0) <= '0';
+           
+           -- LSB first
+           next_sample_shifter(0) <= current_sample_shifter(1);
+           next_sample_shifter(1) <= current_sample_shifter(2);
+           next_sample_shifter(2) <= current_sample_shifter(3);
+           next_sample_shifter(3) <= '0';
+
+
+
        end if;
        
     end process;
