@@ -62,7 +62,8 @@ begin
     combinational_shifter: process(conversion_start, data_parallel, current_sample_shifter) -- fill out the sensitivity list
     begin
         -- default values (why needed?)
-        --next_sample_shifter <= current_sample_shifter;
+        --
+ next_sample_shifter <= current_sample_shifter;
         --next_sample_shifter <= (others => '0');
 
         -- write the code for parallel to serial conversion
@@ -82,6 +83,7 @@ begin
            --next_sample_shifter(0) <= '0';
            
            -- LSB first
+           next_sample_shifter <= current_sample_shifter(3 downto 1) & '0';
            next_sample_shifter(0) <= current_sample_shifter(1);
            next_sample_shifter(1) <= current_sample_shifter(2);
            next_sample_shifter(2) <= current_sample_shifter(3);

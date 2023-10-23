@@ -117,6 +117,7 @@ begin
 
     detection_counter: process (moore_detected, mealy_detected, moore_count, mealy_count, reset)
     begin
+
         if reset = '0' then
             moore_count <= 0;
             mealy_count <= 0;
